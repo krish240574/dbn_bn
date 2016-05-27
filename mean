@@ -1,0 +1,2 @@
+z←mean dataset
+ z←(+/dataset)÷(⍴dataset)
