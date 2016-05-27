@@ -1,0 +1,4 @@
+ z←stdev dataset;variance;mu
+ mu←mean dataset
+ variance←(+/(dataset-mu)*2)÷(¯1+⍴dataset)
+ z←variance*0.5
