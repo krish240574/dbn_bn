@@ -1,4 +1,4 @@
- z←bn_glw layernum;li;no_val
+ z←bn_glw layernum;li;no_val;hhat0;updates
 
  no_val←0
  nc←g_nin
@@ -13,8 +13,8 @@
          r←bn_calclatesthhat layernum
          li←(0)(layernum)(10)  ⍝ CD 4
      :Else
-         ⍝ normalize
-         hhatinput←bn_x hhat0
+         ⍝ normalize and update global
+         g_hhatarr[1;]←bn_x hhat0
          li←(0)(layernum+1)(10) ⍝ indexing from 1 in APL
      :EndIf
      updates←kcontdiv li ⍝ all changes happen to the global data
