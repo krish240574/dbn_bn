@@ -4,25 +4,33 @@
  cdn←⊃li[3] ⍝ number of iterations of the Gibb's chain
  l←⊃li[2] ⍝ layer number
 
- v0←(1,g_nin)⍴⊃g_hhatarr[l;]
- h0hat←(1,g_nin)⍴⊃g_hhatarr[l;] ⍝ initialize posterior of visible as input
- 
+ v←(1,g_nin)⍴⊃g_hhatarr[l-1;] ⍝ training sample
+ h0hat←(1,g_nin)⍴⊃g_hhatarr[l-1;] ⍝ initialize posterior of visible as input
+
  count←1
+ biash←(1,g_nin)⍴g_b[l;]
+ biasv←(1,g_nin)⍴g_b[l-1;]
+
  :While count≤cdn
-     biash←((1,g_nin)⍴g_b[l;])
-     h1hat←1÷(1+*-1×biash+v0+.×⍉g_w[l;;])
-     biasv←((1,g_nin)⍴g_b[l;])
-     v1←1÷(1+*-1×biasv+h1hat+.×g_w[l;;])
+  ⍝  https://www.cs.toronto.edu/~hinton/csc2535/notes/lec4new.pdf
+  ⍝  slide 7
+     h←1÷(1+*-1×biash+v+.×⍉g_w[l-1;;])
+     v←1÷(1+*-1×biasv+h+.×g_w[l-1;;])
+     :If count=1
+         vhzero←h+.×v
+         hzero←h
+         vzero←v
+     :EndIf
      count←count+1
  :EndWhile
-⍝  Update 
- g_w[l;;]←g_w[l;;]+g_lr×((h1hat+.×⍉v0)-(h1hat+.×⍉v1))
- g_b[l;]←((1,g_nin)⍴g_b[l;])+g_lr×(h0hat-h1hat)
- g_b[l-1;]←((1,g_nin)⍴g_b[l;])+g_lr×(v0-v1)
+ ⍝ v and h have latest values, update using them
+ g_w[l;;]←g_w[l;;]+g_lr×(vhzero-(h+.×v))
+ g_b[l;]←((1,g_nin)⍴g_b[l;])+g_lr×(hzero-h)
+ g_b[l-1;]←((1,g_nin)⍴g_b[l;])+g_lr×(vzero-v)
 
  :If l=2 ⍝ 1st layer(should be 1, but indexing in APL is from 1)
-     g_hhatarr[l;]←h0hat     ⍝ return h0hat=first row of input
+     g_hhatarr[l;]←hzero     ⍝ return h0hat=first row of input
  :Else
-     g_hhatarr[l;]←v1
+     g_hhatarr[l;]←v
  :EndIf
  z←no_val
