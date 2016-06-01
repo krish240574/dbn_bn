@@ -1,31 +1,25 @@
- z←bn_calclatesthhat input
+ z←bn_calclatesthhat layernum
  ⍝ j=1⋄while j<=layernum-1
- layernum←⊃input[1]
- nin←⊃input[5]
- b←⊃input[2]
- hhat0←(1,nin)⍴⊃input[3]
- w←⊃input[4]
 
- numlayers←⊃input[6]
- gtflag←⊃input[7]
-
- nc←nin
+ nc←g_nin
 ⍝ :If gtflag=2 ⍝ fine-tuning
 ⍝     nc←isz+1
 ⍝ :EndIf
 
- hhatarr←(numlayers,nc)⍴0
-
  j←1
+ hhat0←(1,g_nin)⍴⊃g_hhatarr[1;]
  :While j≤layernum-1
      ⍝ need to flip w here, between alternate layers
-     hhat0←bn_x hhat0
-     axt←((1,nin)⍴b[j;])+(hhat0+.×w)
-     hhat←(1÷(1+*-1*axt))
-     hhatarr[j;]←hhat ⍝ store each layer's posterior
+     hhat0←(g_isz,g_isz)⍴,⊃(bn_x hhat0)
+     r←(hhat0+.×g_w[1;;])
+     l←(1,g_nin)⍴g_b[j;]
+     axt←(g_isz,g_isz)⍴↑l+¨(1,g_isz)⍴↓r
+
+     ⍝ ReLU - hhat←⍟(1+*axt)
+     hhat←(1÷(1+*-1×axt))
+     g_hhatarr[j;]←hhat[g_nin;] ⍝ store each layer's posterior
      hhat0←hhat ⍝ output becomes input to next layer
      j←j+1
  :EndWhile
- finalhhat←(hhat)(hhatarr)
 
- z←finalhhat
+ z←1
