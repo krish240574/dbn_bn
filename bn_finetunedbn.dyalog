@@ -29,6 +29,6 @@
      ddxh←g_w[i+1;;]×errderivative ⍝ from layer above
      ddxa←ddxh×g_hhatarr[i;](1-g_hhatarr[i;])
      g_b[i;]←g_b[i;]+lr×ddxaj
-     w[i;;]←w[i;;]+ddxa×g_hhatarr[i-1;]
+     g_w[i;;]←g_w[i;;]+ddxa×g_hhatarr[i-1;]
      i←i-1
  :EndWhile
