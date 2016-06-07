@@ -1,12 +1,13 @@
- z←bn_gencreateinput sample
+ z←bn_gencreateinput
  ⎕←'Reading CSV file, few seconds...'
  mnist←DealWithCsv'd:\datasets\mnist\mnist_train_small.csv'
  ⎕←'Read, now onto glw training...'
  nr←(1↑⍴mnist)
  nc←((-1)↑⍴mnist)
- nin←nr
- nout←nin
  g_isz←28
+ nin←g_isz
+ nout←nin
+
  numlayers←5
  mnistmat←(nr,g_isz,g_isz)⍴mnist[(⍳nr);1+⍳((-1)+nc)]
 
@@ -16,10 +17,8 @@
 
  ⍝ normalize here
  yx←(g_isz,g_isz)⍴bn_x g_firstimg
- 
- layernum←1 ⍝ for now
- nin←(-1)↑(⍴sample)
- nout←nin
+
+
  lr←0.0001 ⍝ for now
  ⍝ initialize weights
  a←0.5*(6÷(nin+nout))
@@ -31,9 +30,14 @@
  w←(numlayers,nin,nout)⍴0
  ⍝ Initialize 1st laywe weights
  w[1;;]←(nin,nin)⍴⊃,tmp
+
  b←(numlayers,nin)⍴0 ⍝ biases
+ u←(numclasses,nin)⍴,w[1;;] ⍝ just borrow from g_w - class-hidden wts
+ d←(1,numclasses)⍴1 ⍝ class-biases
+
 
  ⍝ create the input nested array here
- hhatarr←(numlayers,nin)⍴0
- input←(hhatarr)(w)((numlayers,nin)⍴b)(lr)(nin)(numlayers)
+
+ hhatarr←(numlayers,nin)⍴0 ⍝ numlayers+1 is just to indicate the topmost layer is different
+ input←(isz)(hhatarr)(w)((numlayers,nin)⍴b)(lr)(nin)(numlayers)(mnistmat)(u)(d)
  z←input
