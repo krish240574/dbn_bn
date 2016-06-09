@@ -1,7 +1,7 @@
  z←bn_gencreateinput
  ⎕←'Reading CSV file, few seconds...'
  mnist←DealWithCsv'd:\datasets\mnist\mnist_train_small.csv'
- ⎕←'Read, now onto glw training...'
+ 
  nr←(1↑⍴mnist)
  nc←((-1)↑⍴mnist)
  g_isz←28
@@ -16,7 +16,7 @@
  g_firstimg←mnistmat[1;;]
 
  ⍝ normalize here
- yx←(g_isz,g_isz)⍴bn_x g_firstimg
+ (yx mu sigma xhat var)←(g_isz,g_isz)⍴bn_x g_firstimg
 
 
  lr←0.0001 ⍝ for now
@@ -39,5 +39,5 @@
  ⍝ create the input nested array here
 
  hhatarr←(numlayers,nin)⍴0 ⍝ numlayers+1 is just to indicate the topmost layer is different
- input←(isz)(hhatarr)(w)((numlayers,nin)⍴b)(lr)(nin)(numlayers)(mnistmat)(u)(d)
+ input←(isz)(hhatarr)(w)((numlayers,nin)⍴b)(lr)(nin)(numlayers)(mnistmat)(u)(d)(yx)(mu)(sigma)(xhat)(var)
  z←input
