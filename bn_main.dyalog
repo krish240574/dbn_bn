@@ -15,9 +15,10 @@
  ⍝ for MNist data
  ⍝ 100 images read
 
- (g_isz g_hhatarr g_w g_b g_lr g_nin g_numlayers g_mnistmat g_u g_d)←bn_gencreateinput
+ (g_isz g_hhatarr g_w g_b g_lr g_nin g_numlayers g_mnistmat g_u g_d g_yx g_stdev g_mean g_xhat g_var)←bn_gencreateinput
  g_beta←(1,(g_isz×g_isz))⍴1
  g_gamma←(1,(g_isz×g_isz))⍴0
+ ⍝ input←(xt or batch)(w)((numlayers,nin)⍴b)(lr)(nin)(numlayers)(hhatarr)(gtflag)
 
  gtflag←1  ⍝ layer-wise training flag
  input←input,(gtflag)
@@ -29,6 +30,9 @@
  ⎕←'w - weights'
  ⎕←'b←biases for each layer'
  ⎕←'hhatarr←Posterior for each layer'
+
+
+
 
 ⍝
 ⍝ ⍝ Now to get moving averages for various batches
@@ -54,8 +58,6 @@
 ⍝ tmp←(1,isz)⍴(⊃updates[1])
 ⍝ tmp←tmp,y
 ⍝ updates[1]←⊂tmp ⍝ shove back in
-
-
  numclasses←2 ⍝ binary classifier
  d←(1,numclasses)⍴1
  y←(1,numclasses)⍴0 ⍝ classes
@@ -65,6 +67,9 @@
  g_classifier_rbm←tmp,y
 
  yhat←bn_classify ⍝ uses all globals
+
+
+
 
 ⍝
 ⍝
@@ -88,5 +93,5 @@
 ⍝
 ⍝ finetuneinput←(tmp)(w)(⊃updates[3])(⊃updates[4])(⊃updates[5])(⊃updates[6])(⊃updates[7])(⊃updates[8])
 ⍝ ⎕←'finetuning...'
-⍝ z←finetunedbm yhat
+⍝ z←bn_finetunedbm yhat
 ⍝ ⍝o←layernum glw 0 ⍝ return updates from glw
