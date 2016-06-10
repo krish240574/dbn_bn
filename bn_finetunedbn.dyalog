@@ -5,10 +5,10 @@
 ⍝ calculate hhat till the top layer
 
  bn_calclatesthhat g_numlayers+1
- lhhat←(1,g_isz)⍴g_hhatarr[g_numlayers;]
+ lhhat←g_hhatarr[g_numlayers+1;;]
  ⍝hhatarr←(g_numlayers,(g_isz+1))⊃hhats[2]  ⍝ 5X29
- n←(*((1,g_isz)⍴b[g_numlayers+1;])+lhhat+.×g_w[g_numlayers;;]) ⍝ all topmost layer values
- d←(+/((1,g_isz)⍴b[g_numlayers+1;])+lhhat+.×g_w[g_numlayers;;]) ⍝ all topmost layer values
+ n←(*(b[g_numlayers+1;;])+lhhat+.×g_w[g_numlayers;;]) ⍝ all topmost layer values
+ d←(+/*(b[g_numlayers+1;;])+lhhat+.×g_w[g_numlayers;;]) ⍝ all topmost layer values
  topmosthhat←n÷d
 
 ⍝ back-prop
@@ -21,7 +21,7 @@
  :While k>1
      ⎕←k
      ⍝ relU backward
-     tmp←((1,g_isz)⍴g_hhatarr[k;])
+     tmp←((1,g_isz)⍴g_hhatarr[k;;])
      dout[(tmp≤0)/⍳g_isz]←0
      da_bn←dout
 
@@ -30,11 +30,11 @@
 
      ⍝ affine backward
      dx←da+.×⍉g_w[k;;]
-     dw←g_hhatarr[k;]+.×da
+     dw←g_hhatarr[k;;]+.×da
      db←+/da
 
      g_w[k;;]←g_w[k;;]-g_lr×dw
-     g_b[k;]←g_b[k;]-g_lr×db
+     g_b[k;]←g_b[k;;]-g_lr×db
      k←k-1
 
  :EndWhile
