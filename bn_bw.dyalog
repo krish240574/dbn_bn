@@ -1,8 +1,9 @@
  z←bn_bw dout
  dbeta←+/dout
- dgammax←dout
- dgamma=+/g_xhat×dgammax
- dxhat←dgammx×g_gamma
+ dgammax←(1,g_isz×g_isz)⍴dout
+ tmp←(1,g_isz×g_isz)⍴,⊃g_xhat
+ dgamma←+/tmp×dgammax
+ dxhat←dgammax×g_gamma
  divar←+/dxhat×g_mean
  dxmu1←dxhat×(1÷g_var)
  sqrtvar←(g_var+epsilon)*0.5
