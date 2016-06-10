@@ -30,6 +30,6 @@
 
  ⍝ create the input nested array here
 
- hhatarr←(numlayers,nin,nin)⍴0 ⍝ numlayers+1 is just to indicate the topmost layer is different
+ hhatarr←((numlayers+1),nin,nin)⍴0 ⍝ numlayers+1 is just to indicate the topmost layer is different
  input←(isz)(hhatarr)(w)(((numlayers+1),nin,nin)⍴b)(lr)(nin)(numlayers)(mnistmat)(u)(d)
  z←input
