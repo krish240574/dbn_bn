@@ -1,23 +1,15 @@
  z←bn_gencreateinput
  ⎕←'Reading CSV file, few seconds...'
  mnist←DealWithCsv'd:\datasets\mnist\mnist_train_small.csv'
- 
+ ⎕←'Read, now onto glw training...'
  nr←(1↑⍴mnist)
  nc←((-1)↑⍴mnist)
- g_isz←28
- nin←g_isz
+ isz←28
+ nin←isz
  nout←nin
 
  numlayers←5
- mnistmat←(nr,g_isz,g_isz)⍴mnist[(⍳nr);1+⍳((-1)+nc)]
-
- ⍝ sending whole 28X28 image as a minibatch
- batchsz←g_isz
- g_firstimg←mnistmat[1;;]
-
- ⍝ normalize here
- (yx mu sigma xhat var)←(g_isz,g_isz)⍴bn_x g_firstimg
-
+ mnistmat←(nr,isz,isz)⍴mnist[(⍳nr);1+⍳((-1)+nc)]
 
  lr←0.0001 ⍝ for now
  ⍝ initialize weights
@@ -27,17 +19,17 @@
  tmp←DealWithCsv'c:\users\lenovo1\tmp.txt' ⍝ 28X28 random numbers, uniformly distributed b/w
  ⍝ (-a/4) and (a/4)
  ⍝ create w as a 3D array
- w←(numlayers,nin,nout)⍴0
+ w←((numlayers+1),nin,nout)⍴0
  ⍝ Initialize 1st laywe weights
  w[1;;]←(nin,nin)⍴⊃,tmp
-
- b←(numlayers,nin)⍴0 ⍝ biases
+ t←numlayers+1
+ b←((1+numlayers),isz,isz)⍴0 ⍝ biases
  u←(numclasses,nin)⍴,w[1;;] ⍝ just borrow from g_w - class-hidden wts
  d←(1,numclasses)⍴1 ⍝ class-biases
 
 
  ⍝ create the input nested array here
 
- hhatarr←(numlayers,nin)⍴0 ⍝ numlayers+1 is just to indicate the topmost layer is different
- input←(isz)(hhatarr)(w)((numlayers,nin)⍴b)(lr)(nin)(numlayers)(mnistmat)(u)(d)(yx)(mu)(sigma)(xhat)(var)
+ hhatarr←(numlayers,nin,nin)⍴0 ⍝ numlayers+1 is just to indicate the topmost layer is different
+ input←(isz)(hhatarr)(w)(((numlayers+1),nin,nin)⍴b)(lr)(nin)(numlayers)(mnistmat)(u)(d)
  z←input
