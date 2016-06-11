@@ -24,8 +24,8 @@
  ⍝ normalize here
  (g_yx g_mean g_stdev g_xhat g_var)←bn_x g_firstimg
 
- g_beta←(1,(g_isz×g_isz))⍴1
- g_gamma←(1,(g_isz×g_isz))⍴0
+ g_beta←(1,(g_isz×g_isz))⍴0
+ g_gamma←(1,(g_isz×g_isz))⍴1
  ⍝ input←(xt or batch)(w)((numlayers,nin)⍴b)(lr)(nin)(numlayers)(hhatarr)(gtflag)
 
  gtflag←1  ⍝ layer-wise training flag
