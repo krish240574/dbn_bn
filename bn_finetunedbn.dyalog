@@ -7,8 +7,9 @@
  bn_calclatesthhat g_numlayers+1
  lhhat←g_hhatarr[g_numlayers+1;;]
  ⍝hhatarr←(g_numlayers,(g_isz+1))⊃hhats[2]  ⍝ 5X29
- n←(*(b[g_numlayers+1;;])+lhhat+.×g_w[g_numlayers;;]) ⍝ all topmost layer values
- d←(+/*(b[g_numlayers+1;;])+lhhat+.×g_w[g_numlayers;;]) ⍝ all topmost layer values
+ n←(*(g_b[g_numlayers+1;;])+lhhat+.×g_w[g_numlayers;;]) ⍝ all topmost layer values
+ n←,⊃+/¨{n[⍵;]÷+/n[⍵;]}¨⍳g_isz
+ d←(+/*(g_b[g_numlayers+1;;])+lhhat+.×g_w[g_numlayers;;]) ⍝ all topmost layer values
  topmosthhat←n÷d
 
 ⍝ back-prop
@@ -21,8 +22,9 @@
  :While k>1
      ⎕←k
      ⍝ relU backward
-     tmp←((1,g_isz)⍴g_hhatarr[k;;])
-     dout[(tmp≤0)/⍳g_isz]←0
+     tmp←,⊃g_hhatarr[k;;]
+     tmp[(tmp≤0)/⍳g_isz×g_isz]←0
+     dout←(g_isz,g_isz)⍴tmp
      da_bn←dout
 
      ⍝ BN backward
@@ -31,10 +33,10 @@
      ⍝ affine backward
      dx←da+.×⍉g_w[k;;]
      dw←g_hhatarr[k;;]+.×da
-     db←+/da
+     db←(g_isz,g_isz)⍴+/da
 
      g_w[k;;]←g_w[k;;]-g_lr×dw
-     g_b[k;]←g_b[k;;]-g_lr×db
+     g_b[k;;]←g_b[k;;]-g_lr×db
      k←k-1
 
  :EndWhile
