@@ -24,6 +24,7 @@
  w[1;;]←(nin,nin)⍴⊃,tmp
  t←numlayers+1
  b←((1+numlayers),isz,isz)⍴0 ⍝ biases
+ numclasses←2 ⍝ binary classifier
  u←(numclasses,nin)⍴,w[1;;] ⍝ just borrow from g_w - class-hidden wts
  d←(1,numclasses)⍴1 ⍝ class-biases
 
