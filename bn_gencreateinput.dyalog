@@ -9,6 +9,12 @@
  nout←nin
 
  numlayers←5
+ labels←(¯1+⍳100),(100 1⍴(1+mnist[;1]))
+ t←(nr×10)⍴0
+ t[(10×(labels[;1]))+labels[;2]]←1
+ binlabels←(nr,10)⍴t
+
+
  mnistmat←(nr,isz,isz)⍴mnist[(⍳nr);1+⍳((-1)+nc)]
 
  lr←0.0001 ⍝ for now
@@ -24,7 +30,7 @@
  w[1;;]←(nin,nin)⍴⊃,tmp
  t←numlayers+1
  b←((1+numlayers),isz,isz)⍴0 ⍝ biases
- numclasses←2 ⍝ binary classifier
+ numclasses←10
  u←(numclasses,nin)⍴,w[1;;] ⍝ just borrow from g_w - class-hidden wts
  d←(1,numclasses)⍴1 ⍝ class-biases
 
@@ -32,5 +38,5 @@
  ⍝ create the input nested array here
 
  hhatarr←((numlayers+1),nin,nin)⍴0 ⍝ numlayers+1 is just to indicate the topmost layer is different
- input←(isz)(hhatarr)(w)(((numlayers+1),nin,nin)⍴b)(lr)(nin)(numlayers)(mnistmat)(u)(d)
+ input←(numclasses)(isz)(hhatarr)(w)(((numlayers+1),nin,nin)⍴b)(lr)(nin)(numlayers)(mnistmat)(u)(d)(binlabels)
  z←input
