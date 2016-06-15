@@ -15,7 +15,7 @@
  ⍝ for MNist data
  ⍝ 100 images read
 
- (g_isz g_hhatarr g_w g_b g_lr g_nin g_numlayers g_mnistmat g_u g_d)←bn_gencreateinput
+ (g_numclasses g_isz g_hhatarr g_w g_b g_lr g_nin g_numlayers g_mnistmat g_u g_d g_binlabels)←bn_gencreateinput
 
  ⎕←'Bias dimensions = '
  ⎕←⍴g_b
@@ -67,13 +67,18 @@
 ⍝ tmp←tmp,y
 ⍝ updates[1]←⊂tmp ⍝ shove back in
  ⎕←'Classifying now....'
- numclasses←2 ⍝ binary classifier
- d←(1,numclasses)⍴1
+
+ d←(1,g_numclasses)⍴1
+
+
  y←(1,numclasses)⍴0 ⍝ classes
  y[1;1]←1
  y[1;2]←0 ⍝ one hot encoded to 1
- tmp←(1,isz)⍴(,⊃mnistmat[1;1;])
- g_classifier_rbm←tmp,y
+
+ tmp←(1,isz)⍴(,⊃g_mnistmat[1;;])   ⍝ 1 row at a time
+ ⍝tmp←(g_mnistmat[1;;])
+ g_classifier_rbm←tmp ⍝,(1,g_numclasses)⍴g_binlabels[1;]
+ ⍝ first row of 1-hot label array
 
  yhat←bn_classify ⍝ uses all globals
 
