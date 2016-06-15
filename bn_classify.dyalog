@@ -2,8 +2,7 @@
  p_y_given_x←1 10⍴0
  count←1
  :While count≤g_numclasses
-     t←(*g_d[1;count])×(×/(1+*(g_b[g_numlayers+1;;]+(g_isz,g_isz)⍴(g_u[count;]+g_classifier_rbm[1;]+.×g_w[g_numlayers+1;;]))))
-     p_y_given_x[1;count]←t[1]
+     p_y_given_x[1;count]←(*g_d[1;count])×(×/(1+*(g_b[g_numlayers+1;1;]+(g_u[count;]+g_classifier_rbm[1;]+.×g_w[g_numlayers+1;;]))))
      count←count+1
  :EndWhile
 
