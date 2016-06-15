@@ -6,14 +6,14 @@
 
  bn_calclatesthhat g_numlayers+1
  lhhat←g_hhatarr[g_numlayers+1;;]
- ⍝hhatarr←(g_numlayers,(g_isz+1))⊃hhats[2]  ⍝ 5X29
+
  n←(*(g_b[g_numlayers+1;;])+lhhat+.×g_w[g_numlayers;;]) ⍝ all topmost layer values
  n←,⊃+/¨{n[⍵;]÷+/n[⍵;]}¨⍳g_isz
  d←(+/*(g_b[g_numlayers+1;;])+lhhat+.×g_w[g_numlayers;;]) ⍝ all topmost layer values
  topmosthhat←n÷d
-
+ topmosthhat←g_binlabels[1;] ⍝ ahh-haa !
 ⍝ back-prop
- errderivative←yhat-topmosthhat
+ errderivative←yhat-(1,g_numclasses)⍴topmosthhat
 ⍝ g_b[g_numlayers;]←((1,g_isz)⍴g_b[g_numlayers;])+errderivative
 ⍝ w[g_numlayers;]←w[g_numlayers;]+g_lr×errderivative×lhhat
 
