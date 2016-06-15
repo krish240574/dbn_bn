@@ -25,9 +25,9 @@
  tmp←DealWithCsv'c:\users\lenovo1\tmp.txt' ⍝ 28X28 random numbers, uniformly distributed b/w
  ⍝ (-a/4) and (a/4)
  ⍝ create w as a 3D array
- w←((numlayers+1),nin,nout)⍴0
+ w←((numlayers+1),nin,nout)⍴tmp
  ⍝ Initialize 1st laywe weights
- w[1;;]←(nin,nin)⍴⊃,tmp
+ ⍝ w[1;;]←(nin,nin)⍴⊃,tmp
  t←numlayers+1
  b←((1+numlayers),isz,isz)⍴0 ⍝ biases
  numclasses←10
