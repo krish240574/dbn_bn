@@ -1,4 +1,4 @@
- z←kcontdiv li;biash;biasv;v0;v1;count;cdn;h0hat;h1hat;lr;nin;l;no_val
+ z←bn_kcontdiv li;biash;biasv;v0;v1;count;cdn;h0hat;h1hat;lr;nin;l;no_val
  ⍝ CD-n
  no_val←0
  cdn←⊃li[3] ⍝ number of iterations of the Gibb's chain
