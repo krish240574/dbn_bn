@@ -20,12 +20,12 @@
  g_beta←(1,g_isz)⍴0
  g_gamma←(1,g_isz)⍴1
  count←1
- g_firstimg←0
+ g_firstimg1←0
  :While count≤nr
-     g_firstimg←(1,g_isz)⍴(,⊃g_mnistmat[count;])
-     g_firstimg[(g_firstimg≠0)/⍳g_isz]←1
+     g_firstimg1←(,⊃g_mnistmat[count;])
+     g_firstimg1[(g_firstimg1≠0)/⍳g_isz]←1
     ⍝ normalize here
-     (g_yx g_mean g_stdev g_xhat g_var)←bn_x g_firstimg
+     (g_yx g_mean g_stdev g_xhat g_var)←bn_x g_firstimg1
     ⍝ this will glw-train the DBN
      updates←bn_glw 1
 
@@ -51,7 +51,7 @@
 ⍝ input←bn_gencreateinput yx
 
      ⎕←'Classifying now....'
-     g_classifier_rbm←g_firstimg
+     g_classifier_rbm←g_firstimg1
      yhat←bn_classify
 
      ⎕←'finetuning dbn...'
