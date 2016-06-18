@@ -1,4 +1,4 @@
-z←bn_calclatesthhat layernum
+ z←bn_calclatesthhat layernum
  j←1
  hhat0←g_mnistmat[1;]
  :While j≤layernum
