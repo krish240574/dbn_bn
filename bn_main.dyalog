@@ -1,4 +1,4 @@
- z←bn_main;count;layernum;nin;nout;a;nr;nc;isz;mnist;numlayers;mnistmat;firstimg;input
+ z←bn_main;count;output;yhat;updates
  ⍝ greedy layer-wise pre-training for a DBN
  ⍝ Training set D = {Xt}(t=1..T)
  ⍝ pre-training learning rate epsilonp
@@ -17,28 +17,17 @@
 
  (g_numclasses g_isz g_hhatarr g_w g_b g_lr g_nin g_numlayers g_mnistmat g_u g_d g_binlabels)←bn_gencreateinput
 
- ⎕←'Bias dimensions = '
- ⎕←⍴g_b
-
- g_firstimg←g_mnistmat[1;;]
- ⍝ normalize here
- (g_yx g_mean g_stdev g_xhat g_var)←bn_x g_firstimg
-
- g_beta←(1,(g_isz×g_isz))⍴0
- g_gamma←(1,(g_isz×g_isz))⍴1
- ⍝ input←(xt or batch)(w)((numlayers,nin)⍴b)(lr)(nin)(numlayers)(hhatarr)(gtflag)
-
- gtflag←1  ⍝ layer-wise training flag
- input←input,(gtflag)
+ g_beta←(1,g_isz)⍴0
+ g_gamma←(1,g_isz)⍴1
  count←1
-
- ⍝ change glw to add BN layer in before non-linear activation
- updates←bn_glw 1  ⍝ this will glw-train the DBN - gamma and beta also will be returned
- ⎕←'GLW training done ! Distributions are in global values:'
- ⎕←'w - weights'
- ⎕←'b←biases for each layer'
- ⎕←'hhatarr←Posterior for each layer'
-
+ g_firstimg←0
+ :While count≤nr
+     g_firstimg←(1,g_isz)⍴(,⊃g_mnistmat[count;])
+     g_firstimg[(g_firstimg≠0)/⍳g_isz]←1
+    ⍝ normalize here
+     (g_yx g_mean g_stdev g_xhat g_var)←bn_x g_firstimg
+    ⍝ this will glw-train the DBN
+     updates←bn_glw 1
 
 
 
@@ -60,53 +49,14 @@
 ⍝ ⍝ recreate inputs now, so we have a fresh start with new BN vals
 ⍝
 ⍝ input←bn_gencreateinput yx
-⍝
-⍝ ⍝ Now to modify the top layer for y inputs
-⍝ y←(1,batchsz)⍴1 ⍝ 1 for now , need to generate y later
-⍝ tmp←(1,isz)⍴(⊃updates[1])
-⍝ tmp←tmp,y
-⍝ updates[1]←⊂tmp ⍝ shove back in
- ⎕←'Classifying now....'
 
- d←(1,g_numclasses)⍴1
+     ⎕←'Classifying now....'
+     g_classifier_rbm←g_firstimg
+     yhat←bn_classify
 
+     ⎕←'finetuning dbn...'
+     output←bn_finetunedbm yhat
+     count←count+1
+     z←output
 
- y←(1,numclasses)⍴0 ⍝ classes
- y[1;1]←1
- y[1;2]←0 ⍝ one hot encoded to 1
-
- tmp←(1,isz)⍴(,⊃g_mnistmat[1;;])   ⍝ 1 row at a time
- ⍝tmp←(g_mnistmat[1;;])
- g_classifier_rbm←tmp ⍝,(1,g_numclasses)⍴g_binlabels[1;]
- ⍝ first row of 1-hot label array
-
- yhat←bn_classify ⍝ uses all globals
-
-
-
-
-⍝
-⍝
-⍝ w←⊃updates[2]
-⍝ tmp←w[nin;]
-⍝ w←w,[1]tmp ⍝ just append last row of learned weights for now
-⍝ updates[2]←⊂w
-⍝
-⍝⍝ b←⊃updates[3]
-⍝⍝ b←b,b[;isz]
-⍝⍝ updates[3]←⊂b
-⍝ ⍝ updates←updates,(nin)(numlayers)(hhatarr)(gtflag)
-⍝
-⍝ nin←⊃updates[5]
-⍝ updates[5]←⊂(1+nin) ⍝added y
-⍝
-⍝⍝ z←updates
-⍝ gtflag←2
-⍝ updates[8]←⊂gtflag ⍝ fine-tuning
-⍝
-⍝
-⍝ finetuneinput←(tmp)(w)(⊃updates[3])(⊃updates[4])(⊃updates[5])(⊃updates[6])(⊃updates[7])(⊃updates[8])
- ⎕←'finetuning...'
- output←bn_finetunedbm yhat
-⍝ ⍝o←layernum glw 0 ⍝ return updates from glw
- z←output
+ :EndWhile
