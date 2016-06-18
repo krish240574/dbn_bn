@@ -4,8 +4,8 @@
  cdn←⊃li[3] ⍝ number of iterations of the Gibb's chain
  l←⊃li[2] ⍝ layer number
 
- v←(1,g_nin)⍴⊃g_hhatarr[l-1;] ⍝ training sample
- h0hat←(1,g_nin)⍴⊃g_hhatarr[l-1;] ⍝ initialize posterior of visible as input
+ v←(1,g_nin)⍴,⊃g_hhatarr[l-1;] ⍝ training sample
+ h0hat←(1,g_nin)⍴,⊃g_hhatarr[l-1;] ⍝ initialize posterior of visible as input
 
  count←1
  biash←(1,g_nin)⍴g_b[l;]
@@ -17,14 +17,14 @@
      h←1÷(1+*-1×biash+v+.×⍉g_w[l-1;;])
      v←1÷(1+*-1×biasv+h+.×g_w[l-1;;])
      :If count=1
-         vhzero←h+.×v
+         vhzero←h+.×⍉v
          hzero←h
          vzero←v
      :EndIf
      count←count+1
  :EndWhile
  ⍝ v and h have latest values, update using them
- g_w[l;;]←g_w[l;;]+g_lr×(vhzero-(h+.×v))
+ g_w[l;;]←g_w[l;;]+g_lr×(vhzero-(h+.×⍉v))
  g_b[l;]←((1,g_nin)⍴g_b[l;])+g_lr×(hzero-h)
  g_b[l-1;]←((1,g_nin)⍴g_b[l;])+g_lr×(vzero-v)
 
