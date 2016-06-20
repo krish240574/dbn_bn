@@ -1,18 +1,21 @@
- z←bn_bw dout
+ z←bn_bw dout;tmpbw;xc;epsilon;dxc;dstd;dmu;dx;dbeta;dgamma;dgammax;dxhat;dvar;dxn
  epsilon←0.00001
+ xc←(1,g_isz)⍴(g_firstimg1-g_mean)
+
  dbeta←+/dout
- dgammax←dout
- tmp←(1,g_isz)⍴,⊃g_xhat
- dgamma←+/tmp×dgammax
- dxhat←dgammax×(1,g_isz)⍴g_gamma
- divar←+/,dxhat×g_mean
- sqrtvar←(g_var+epsilon)*0.5
- ivar←1÷sqrtvar
- dxmu1←dxhat×ivar
- sqrtvar←(g_var+epsilon)*0.5
- dsqrtvar←divar×(¯1)÷(sqrtvar*2)
- dvar←dsqrtvar×0.5×(1÷(sqrtvar))
- dsq←dvar×1÷(g_isz)×((1,g_isz)⍴1)
- dxmu2←2×g_mean×dsq
- dx1←(dxmu1+dxmu2)
- z←(dx1)(dgamma)(dbeta)
+
+ tmpbw←(1,g_isz)⍴,⊃g_xhat
+ dgamma←+/tmpbw×dout
+
+ dxn←dout×(1,g_isz)⍴g_gamma
+
+ dxc←dxn÷g_stdev
+
+ dstd←(¯1)×+/(dxn×xc÷(g_stdev*2))
+
+ dvar←0.5×dstd×g_stdev
+ dxc←dxc+(2÷g_isz)×(xc×dvar)
+ dmu←+/dxc
+ dx←dxc-(dmu÷g_isz)
+
+ z←(dx)(dgamma)(dbeta)
