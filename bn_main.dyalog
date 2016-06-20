@@ -1,4 +1,4 @@
- z←bn_main;count;output;yhat;updates
+ z←bn_main;counter;output;yhat;updates
  ⍝ greedy layer-wise pre-training for a DBN
  ⍝ Training set D = {Xt}(t=1..T)
  ⍝ pre-training learning rate epsilonp
@@ -15,21 +15,20 @@
  ⍝ for MNist data
  ⍝ 100 images read
 
- (g_numclasses g_isz g_hhatarr g_w g_b g_lr g_nin g_numlayers g_mnistmat g_u g_d g_binlabels)←bn_gencreateinput
-
+ (g_nr g_numclasses g_isz g_hhatarr g_w g_b g_lr g_nin g_numlayers g_mnistmat g_u g_d g_binlabels)←bn_gencreateinput
  g_beta←(1,g_isz)⍴0
  g_gamma←(1,g_isz)⍴1
- count←1
+ counter←1
  g_firstimg1←0
- :While count≤nr
-     g_firstimg1←(,⊃g_mnistmat[count;])
-     g_firstimg1[(g_firstimg1≠0)/⍳g_isz]←1
-    ⍝ normalize here
+ :While counter≤g_nr
+     ⎕←'Image number - '
+     ⎕←counter
+     g_firstimg1←(,⊃g_mnistmat[counter;])
+     ⍝g_firstimg1[(g_firstimg1≠0)/⍳g_isz]←1
+     ⍝ normalize here
      (g_yx g_mean g_stdev g_xhat g_var)←bn_x g_firstimg1
-    ⍝ this will glw-train the DBN
-     updates←bn_glw 1
-
-
+     ⍝ this will glw-train the DBN
+     bn_glw 1
 
 ⍝
 ⍝ ⍝ Now to get moving averages for various batches
@@ -51,12 +50,12 @@
 ⍝ input←bn_gencreateinput yx
 
      ⎕←'Classifying now....'
-     g_classifier_rbm←g_firstimg1
+     g_classifier_rbm←(1,g_isz)⍴g_yx
      yhat←bn_classify
 
      ⎕←'finetuning dbn...'
-     output←bn_finetunedbm yhat
-     count←count+1
-     z←output
+     ⍝counter bn_finetunedbm yhat
+     counter←counter+1
+     ⍝z←output
 
  :EndWhile
