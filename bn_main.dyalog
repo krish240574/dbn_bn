@@ -50,11 +50,11 @@
 ⍝ input←bn_gencreateinput yx
 
      ⎕←'Classifying now....'
-     g_classifier_rbm←(1,g_isz)⍴g_yx
+     g_classifier_rbm←(1,g_isz)⍴g_hhatarr[g_numlayers+1;]
      yhat←bn_classify
 
      ⎕←'finetuning dbn...'
-     ⍝counter bn_finetunedbm yhat
+     counter bn_finetunedbm yhat
      counter←counter+1
      ⍝z←output
 
