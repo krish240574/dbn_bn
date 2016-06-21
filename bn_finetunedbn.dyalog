@@ -1,7 +1,7 @@
- ctr bn_finetunedbm yhat;tmp1;k;topmosthhat;errderivative;dout;da_bn;dgamma;dbeta;dx;da;dw;db
+ ctr bn_finetunedbm yhat;tmp1;kk;topmosthhat;errderivative;dout;da_bn;dgamma;dbeta;dx;da;dw;db
 ⍝ forward-prop
 ⍝ calculate hhat till the top layer
- bn_calclatesthhat g_numlayers+1
+ bn_calclatesthhat g_numlayers
  lhhat←g_hhatarr[g_numlayers+1;]
 
 ⍝ n←(*(g_b[g_numlayers+1;;])+lhhat+.×g_w[g_numlayers;;]) ⍝ all topmost layer values
@@ -14,29 +14,28 @@
 ⍝ g_b[g_numlayers;]←((1,g_isz)⍴g_b[g_numlayers;])+errderivative
 ⍝ w[g_numlayers;]←w[g_numlayers;]+g_lr×errderivative×lhhat
 
- k←g_numlayers
+ kk←g_numlayers
 
- :While k≥1
-     ⍝⎕←k
-     ⍝ relU backward
-     tmp1←,⊃g_hhatarr[k;]
+ :While kk≥1
+     ⍝ relU backkward
+     tmp1←,⊃g_hhatarr[kk;]
      tmp1[(tmp1≤0)/⍳g_isz]←0
      dout←(1,g_isz)⍴tmp1
      da_bn←dout
 
-     ⍝ BN backward
+     ⍝ BN backkward
      (da dgamma dbeta)←bn_bw dout
 
-     ⍝ affine backward
-     dx←da+.×⍉g_w[k;;]
-     dw←g_hhatarr[k;]+.×⍉da
+     ⍝ affine backkward
+     dx←da+.×⍉g_w[kk;;]
+     dw←g_hhatarr[kk;]+.×⍉da
      db←(1,g_isz)⍴+/da
 
-     g_w[k;;]←g_w[k;;]+g_lr×dw
-     g_b[k;]←((1,g_isz)⍴,⊃g_b[k;])-g_lr×db
-    ⍝ g_gamma←g_gamma-g_lr×dgamma
-⍝     g_beta←g_beta-g_lr×dbeta
-     k←k-1
+     g_w[kk;;]←g_w[kk;;]+g_lr×dw
+     g_b[kk;]←((1,g_isz)⍴,⊃g_b[kk;])-g_lr×db
+     g_gamma←g_gamma-g_lr×dgamma
+     g_beta←g_beta-g_lr×dbeta
+     kk←kk-1
 
  :EndWhile
  z←0
