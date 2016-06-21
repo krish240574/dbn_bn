@@ -20,6 +20,7 @@
  g_gamma←(1,g_isz)⍴1
  counter←1
  g_firstimg1←0
+ g_yhat←(g_nr,g_numclasses)⍴0
  :While counter≤g_nr
      ⎕←'Image number - '
      ⎕←counter
@@ -51,7 +52,7 @@
 
      ⎕←'Classifying now....'
      g_classifier_rbm←(1,g_isz)⍴g_hhatarr[g_numlayers+1;]
-     yhat←bn_classify
+     g_yhat[counter;]←bn_classify
 
      ⎕←'finetuning dbn...'
      counter bn_finetunedbm yhat
