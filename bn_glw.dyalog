@@ -1,12 +1,6 @@
- bn_glw layernum;li;no_val;hhat0;updates
-
- no_val←0
+ bn_glw layernum;li;hhat0;updates
 
  :While layernum≤g_numlayers+1
-    ⍝ ⎕←'Layer number - '
-    ⍝ ⎕←layernum
-     ⍝ calculate hidden layer posterior
-
      :If ((layernum>1)∧(layernum≤g_numlayers+1))
          r←bn_calclatesthhat layernum
          li←(0)(layernum)(10)
