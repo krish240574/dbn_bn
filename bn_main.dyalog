@@ -1,4 +1,4 @@
- z←bn_main;counter;output;yhat;updates
+ z←bn_main;counter;output;updates
  ⍝ greedy layer-wise pre-training for a DBN
  ⍝ Training set D = {Xt}(t=1..T)
  ⍝ pre-training learning rate epsilonp
@@ -55,7 +55,7 @@
      g_yhat[counter;]←bn_classify
 
      ⎕←'finetuning dbn...'
-     counter bn_finetunedbm yhat
+     counter bn_finetunedbm (1,g_numclasses)⍴g_yhat[counter;]
      counter←counter+1
      ⍝z←output
 
