@@ -14,7 +14,7 @@
 ⍝ g_b[g_numlayers;]←((1,g_isz)⍴g_b[g_numlayers;])+errderivative
 ⍝ w[g_numlayers;]←w[g_numlayers;]+g_lr×errderivative×lhhat
 
- kk←g_numlayers
+ kk←g_numlayers+1
 
  :While kk≥1
      ⍝ relU backkward
@@ -30,8 +30,9 @@
      dx←da+.×⍉g_w[kk;;]
      dw←g_hhatarr[kk;]+.×⍉da
      db←(1,g_isz)⍴+/da
-
-     g_w[kk;;]←g_w[kk;;]+g_lr×dw
+     :If kk≤g_numlayers
+         g_w[kk;;]←g_w[kk;;]+g_lr×dw
+     :EndIf
      g_b[kk;]←((1,g_isz)⍴,⊃g_b[kk;])-g_lr×db
      g_gamma←g_gamma-g_lr×dgamma
      g_beta←g_beta-g_lr×dbeta
