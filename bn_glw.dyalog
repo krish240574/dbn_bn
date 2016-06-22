@@ -1,7 +1,7 @@
  bn_glw layernum;li;hhat0;updates
 
- :While layernum≤g_numlayers+1
-     :If ((layernum>1)∧(layernum≤g_numlayers+1))
+ :While layernum≤g_numlayers
+     :If ((layernum>1)∧(layernum≤g_numlayers))
          r←bn_calclatesthhat layernum
          li←(0)(layernum)(10)
      :Else
