@@ -1,7 +1,7 @@
  z←bn_gencreateinput;input;tmp;mnist;nr;nc;isz;nin;nout;numlayers;numclasses;labels;t;binlabels;mnistmat;w;b;u;d;hhatarr
  ⎕←'Reading CSV file, few seconds...'
- ⍝mnist←DealWithCsv'd:\datasets\mnist\mnist_train_small.csv'
- mnist←DealWithCsv'd:\datasets\numerai\numerai_train_small.csv'
+ mnist←DealWithCsv'd:\datasets\mnist\mnist_train_small.csv'
+ ⍝mnist←DealWithCsv'd:\datasets\numerai\numerai_training_data.csv'
  mnist←mnist[;22],mnist[;⍳21]
  ⎕←'Read, now onto glw training...'
  nr←(1↑⍴mnist)
@@ -30,10 +30,10 @@
 
  ⍝ (-a/4) and (a/4)
  ⍝ create w as a 3D array
- w←((numlayers+1),nin,nout)⍴tmp
+ w←(numlayers,nin,nout)⍴tmp
  ⍝w[1;;]←(nin,nout)⍴tmp
 
- b←((1+numlayers),isz)⍴0 ⍝ biases
+ b←(numlayers,isz)⍴0 ⍝ biases
 
  u←(numclasses,nin)⍴tmp
  d←(1,numclasses)⍴1 ⍝ class-biases
@@ -41,7 +41,7 @@
 
  ⍝ create the input nested array here
 
- hhatarr←((numlayers+1),nin)⍴0 ⍝ numlayers+1 is just to indicate the topmost layer is different
+ hhatarr←(numlayers,nin)⍴0
  input←(nr)(numclasses)(isz)(hhatarr)(w)(b)(lr)(nin)(numlayers)(mnistmat)(u)(d)(binlabels)
  hhatarr←0
  w←0
