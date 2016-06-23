@@ -27,7 +27,7 @@
      g_firstimg1←(,⊃g_mnistmat[counter;])
      ⍝g_firstimg1[(g_firstimg1≠0)/⍳g_isz]←1
      ⍝ normalize here
-     (g_yx g_mean g_stdev g_xhat g_var)←bn_x g_firstimg1
+     ⍝ (g_yx g_mean g_stdev g_xhat g_var)←bn_x g_firstimg1
      ⍝ this will glw-train the DBN
      bn_glw 1
 
