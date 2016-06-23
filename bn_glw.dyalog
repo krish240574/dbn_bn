@@ -5,7 +5,7 @@
          r←bn_calclatesthhat layernum+1
          li←(0)(layernum+1)(10)
      :Else
-         hhat0←(1,g_isz)⍴g_yx
+         hhat0←(1,g_isz)⍴g_firstimg1
          g_hhatarr[layernum;]←hhat0
          li←(0)(layernum+1)(10)
      :EndIf
