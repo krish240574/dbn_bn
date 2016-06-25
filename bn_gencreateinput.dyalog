@@ -1,57 +1,62 @@
- z←bn_gencreateinput;input;tmp;mnist;nr;nc;isz;nin;nout;numlayers;numclasses;labels;t;binlabels;mnistmat;w;b;u;d;hhatarr
- ⎕←'Reading CSV file, few seconds...'
- ⍝mnist←DealWithCsv'd:\datasets\mnist\mnist_train_small.csv'
- ⍝mnist←DealWithCsv'd:\datasets\numerai\numerai_training_data.csv'
- mnist←DealWithCsv'd:\datasets\numerai\numerai_train_small.csv'
- mnist←mnist[;22],mnist[;⍳21]
- ⎕←'Read, now onto glw training...'
- nr←(1↑⍴mnist)
- nc←((-1)↑⍴mnist)
- isz←(¯1+nc)
- nin←isz
- nout←nin
+ z←bn_main;counter;output;updates
+ ⍝ greedy layer-wise pre-training for a DBN
+ ⍝ Training set D = {Xt}(t=1..T)
+ ⍝ pre-training learning rate epsilonp
+ ⍝ nin = number of units in layer (i-1)
+ ⍝ nout = number of units in layer i
+ ⍝ initialize weights a = 6÷(nin + nout)
+ ⍝ wi(jk) - U(-4×0.5*a, 4×0.5*a)
+ ⍝ hhatx = posterior of x
+ ⍝ hi = output from layer i
+ ⍝ o is the output of the whole network
+ ⍝ b = bias for each layer
+ ⍝ sigm = sigmoid activation function
+ ⍝ Bengio(2012) - http://arxiv.org/pdf/1206.5533v2.pdf
+ ⍝ for MNist data
+ ⍝ 100 images read
 
- numlayers←5
- numclasses←2
+ (g_nr g_numclasses g_isz g_hhatarr g_w g_b g_lr g_nin g_numlayers g_mnistmat g_u g_d g_binlabels)←bn_gencreateinput
+ g_beta←(1,g_isz)⍴0
+ g_gamma←(1,g_isz)⍴1
+ counter←1
+ g_firstimg1←0
+ g_yhat←(g_nr,g_numclasses)⍴0
+ :While counter≤g_nr
+     ⎕←'Image number - '
+     ⎕←counter
+     g_firstimg1←(,⊃g_mnistmat[counter;])
+     ⍝g_firstimg1[(g_firstimg1≠0)/⍳g_isz]←1
+     ⍝ normalize here
+     ⍝ (g_yx g_mean g_stdev g_xhat g_var)←bn_x g_firstimg1
+     ⍝ this will glw-train the DBN
+     bn_glw 1
 
- labels←(¯1+⍳nr),((nr,1)⍴(1+mnist[;1]))
- t←(nr×numclasses)⍴0
- t[(numclasses×(labels[;1]))+labels[;2]]←1
- binlabels←(nr,numclasses)⍴t
+⍝
+⍝ ⍝ Now to get moving averages for various batches
+⍝ ⍝ Use multiple images read in images
+⍝ ⍝ calculate moving averages using multiple batches
+⍝ ⍝ calculate var[x] ← (m÷m-1)ExpVal[mean stdev over B batches]
+⍝ ⍝ calculate mean[x]←ExpVal[x] ← mean[all batchwise means]
+⍝ tmp←mnistmat[1+⍳(¯1+nr);;]
+⍝ (muma sma)←bn_ma←bn_calcma tmp
+⍝ Ex←muma
+⍝ ma_batchsz←⍴,tmp[1;;]
+⍝ Varx←(ma_batchsz)÷((ma_batchsz)-1)×sma
+⍝
+⍝ ⍝ replace all BN(x) with
+⍝ ⍝ y=(gamma×x)÷(0.5*(Varx+epsilon)+(beta-(gamma×muma)÷(0.5*(Varx+epsilon))
+⍝ yx←(gamma×x)÷(0.5*(Varx+epsilon))+(beta-(gamma×muma)÷(0.5*(Varx+epsilon)))
+⍝ ⍝ recreate inputs now, so we have a fresh start with new BN vals
+⍝
+⍝ input←bn_gencreateinput yx
 
+     ⎕←'Classifying now....'
+     g_classifier_rbm←(1,g_isz)⍴g_hhatarr[g_numlayers;]
+     g_yhat[counter;]←bn_classify
 
- mnistmat←(nr,isz)⍴mnist[(⍳nr);1+⍳((-1)+nc)]
+     ⎕←'finetuning dbn...'
+     bn_finetunedbm counter
+     counter←counter+1
+     ⍝z←output
 
- lr←0.75
- ⍝ initialize weights
- a←0.5*(6÷(nin+nout))
- ⍝ http://docs.scipy.org/doc/numpy-1.10.0/reference/generated/numpy.random.uniform.html
-
- tmp←DealWithCsv'c:\users\lenovo1\tmp.txt' ⍝ random numbers, uniformly distributed b/w
-
- ⍝ (-a/4) and (a/4)
- ⍝ create w as a 3D array
- w←(numlayers,nin,nout)⍴tmp
- ⍝w[1;;]←(nin,nout)⍴tmp
-
- b←(numlayers,isz)⍴0 ⍝ biases
-
- u←(numclasses,nin)⍴w[2;;]
- d←(1,numclasses)⍴1 ⍝ class-biases
-
-
- ⍝ create the input nested array here
-
- hhatarr←(numlayers,nin)⍴0
- input←(nr)(numclasses)(isz)(hhatarr)(w)(b)(lr)(nin)(numlayers)(mnistmat)(u)(d)(binlabels)
- hhatarr←0
- w←0
- b←0
- mnistmat←0
- mnist←0
- u←0
- d←0
- labels←0
- t←0
-
- z←input
+ :EndWhile
