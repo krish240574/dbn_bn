@@ -2,7 +2,7 @@
 
  :While layernum≤g_numlayers-1
      :If layernum>1
-         r←bn_calclatesthhat layernum+1
+         r←1 bn_calclatesthhat layernum+1
          li←(0)(layernum+1)(10)
      :Else
          hhat0←(1,g_isz)⍴g_firstimg1
