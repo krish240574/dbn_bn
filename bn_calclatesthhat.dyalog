@@ -4,7 +4,7 @@
      hhat0←(1,g_nin)⍴g_hhatarr[layernum-1;]
      axt←((1,g_nin)⍴g_b[layernum;])+(hhat0+.×g_w[layernum-1;;])
      g_hhatarr[layernum;]←0⌈axt
-     g_w[layernum-1;;]←⍉g_w[layernum-2;;]
+     g_w[layernum;;]←⍉g_w[layernum-1;]
  :Else
      jj←2
      :While jj≤layernum
