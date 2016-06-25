@@ -25,7 +25,7 @@
  :EndWhile
  ⍝ v and h have latest values, update using them
  :If l≤g_numlayers
-     g_w[l;;]←g_w[l;;]+g_lr×(vhzero-(h+.×⍉v))
+     g_w[l-1;;]←g_w[l-1;;]+g_lr×(vhzero-(h+.×⍉v))
  :EndIf
  g_b[l;]←((1,g_nin)⍴g_b[l;])+g_lr×(hzero-h)
  g_b[l-1;]←((1,g_nin)⍴g_b[l;])+g_lr×(vzero-v)
