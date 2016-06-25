@@ -1,12 +1,13 @@
  z←flag bn_calclatesthhat layernum;jj;kk;bn_axt
 
  :If flag=1
+     g_w[layernum;;]←⍉g_w[layernum-1;;]
      hhat0←(1,g_nin)⍴g_hhatarr[layernum-1;]
      axt←((1,g_nin)⍴g_b[layernum;])+(hhat0+.×g_w[layernum-1;;])
      g_hhatarr[layernum;]←0⌈axt
-     g_w[layernum;;]←⍉g_w[layernum-1;]
  :Else
      jj←2
+     hhat0←(1,g_nin)⍴g_hhatarr[1;]
      :While jj≤layernum
          axt←((1,g_nin)⍴g_b[jj;])+(hhat0+.×g_w[jj-1;;])
         ⍝ ReLu
@@ -17,7 +18,7 @@
          jj←jj+1
         ⍝ need to flip w here, between alternate layers
          :If ((jj>1)∧(jj≤layernum))
-             g_w[jj-1;;]←⍉g_w[jj-2;;]
+             g_w[jj;;]←⍉g_w[jj-1;;]
          :EndIf
      :EndWhile
  :EndIf
