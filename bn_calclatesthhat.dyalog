@@ -20,6 +20,5 @@
              g_w[jj-1;;]←⍉g_w[jj-2;;]
          :EndIf
      :EndWhile
-     g_w[layernum;;]←⍉g_w[layernum-1;;]
  :EndIf
  z←1
