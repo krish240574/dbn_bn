@@ -1,4 +1,4 @@
- z←bn_classify;count;p_y_given_x;p
+ z←bn_classify;count;p_y_given_x;p;count
  p_y_given_x←1 g_numclasses⍴0
  count←1
  :While count≤g_numclasses
@@ -7,5 +7,4 @@
  :EndWhile
 
  p←p_y_given_x÷(+/p_y_given_x)
- ⎕←p
  z←p
