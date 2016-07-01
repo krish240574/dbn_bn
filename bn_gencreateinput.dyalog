@@ -1,8 +1,8 @@
  z←bn_gencreateinput;input;tmp;mnist;nr;nc;isz;nin;nout;numlayers;numclasses;labels;t;binlabels;mnistmat;w;b;u;d;hhatarr
  ⎕←'Reading CSV file, few seconds...'
  ⍝mnist←DealWithCsv'd:\datasets\mnist\mnist_train_small.csv'
- ⍝mnist←DealWithCsv'd:\datasets\numerai\numerai_training_data.csv'
- mnist←DealWithCsv'd:\datasets\numerai\numerai_train_small.csv'
+ mnist←DealWithCsv'd:\datasets\numerai\numerai_training_data.csv'
+ ⍝mnist←DealWithCsv'd:\datasets\numerai\numerai_train_small.csv'
  mnist←mnist[;22],mnist[;⍳21]
  ⎕←'Read, now onto glw training...'
  nr←(1↑⍴mnist)
@@ -22,7 +22,7 @@
 
  mnistmat←(nr,isz)⍴mnist[(⍳nr);1+⍳((-1)+nc)]
 
- lr←0.005
+ lr←0.0002
  ⍝ initialize weights
  a←0.5*(6÷(nin+nout))
  ⍝ http://docs.scipy.org/doc/numpy-1.10.0/reference/generated/numpy.random.uniform.html
@@ -38,7 +38,7 @@
 
 
  u←(numclasses,nin)⍴t[(numclasses×nin)?⍴t]
- d←(1,numclasses)⍴1 ⍝ class-biases
+ d←(1,numclasses)⍴0.1 ⍝ class-biases
 
 
  ⍝ create the input nested array here
