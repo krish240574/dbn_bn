@@ -9,7 +9,7 @@
  one←(topmosthhat=1)/⍳⍴topmosthhat
  errderivative←(1 1⍴,(one-1)-g_yhat[ctr;one])
 
-⍝ back-prop
+ ⍝ back-prop
 ⍝ mx←g_yhat[ctr;1]⌈g_yhat[ctr;2]
 ⍝
 ⍝ errderivative←(1,g_isz)⍴,⊃(lhhat-mx)
@@ -19,14 +19,17 @@
  ⍝ g_b[g_numlayers;]←((1,g_isz)⍴g_b[g_numlayers;])+errderivative
  ⍝ w[g_numlayers;]←w[g_numlayers;]+g_lr×errderivative×lhhat
 
-⍝ back-prop
+
  g_b[g_numlayers;]←((1,g_isz)⍴g_b[g_numlayers;])+g_lr×errderivative
  g_w[g_numlayers;;]←g_w[g_numlayers;;]+g_lr×errderivative+.×⍉lhhat
- ii←g_numlayers-1
+ ii←g_numlayers
  :While ii≥1
      ddxh←(1,g_isz)⍴,⊃⍉(g_w[ii;;]+.×⍉errderivative)
-
-     ddxa←(1,g_isz)⍴,⊃(((ddxh)+.×(⍉g_hhatarr[ii;]))+.×(1,g_isz)⍴(1-g_hhatarr[ii;]))
+     ktemp←(1,g_isz)⍴,⊃g_hhatarr[ii;]
+     ktemp[;(0<(,ktemp))/⍳g_isz]←1
+     ktemp[;(0≥(,ktemp))/⍳g_isz]←0
+     ⍝ddxa←(1,g_isz)⍴,⊃(((ddxh)+.×(⍉g_hhatarr[ii;]))×(1,g_isz)⍴(1-g_hhatarr[ii;]))
+     ddxa←(1,g_isz)⍴,⊃((ddxh)+.×(⍉g_hhatarr[ii;]))×(1,g_isz)⍴ktemp ⍝ drelu
      g_b[ii;]←((1,g_isz)⍴,⊃g_b[ii;])+g_lr×ddxa
 
      :If ii=1
