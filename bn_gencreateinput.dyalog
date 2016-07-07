@@ -1,9 +1,16 @@
- z←bn_gencreateinput;input;tmp;mnist;nr;nc;isz;nin;nout;numlayers;numclasses;labels;t;binlabels;mnistmat;w;b;u;d;hhatarr
+ z←bn_gencreateinput switch;input;tmp;mnist;nr;nc;isz;nin;nout;numlayers;numclasses;labels;t;binlabels;mnistmat;w;b;u;d;hhatarr
  ⎕←'Reading CSV file, few seconds...'
- ⍝mnist←DealWithCsv'd:\datasets\mnist\mnist_train_small.csv'
- mnist←DealWithCsv'd:\datasets\numerai\numerai_training_data.csv'
- ⍝mnist←DealWithCsv'd:\datasets\numerai\numerai_train_small.csv'
- mnist←mnist[;22],mnist[;⍳21]
+
+ :If switch=1
+     mnist←DealWithCsv'd:\datasets\numerai\numerai_training_data.csv'
+     nc←((-1)↑⍴mnist)
+     mnist←mnist[;nc],mnist[;⍳(¯1+nc)]
+ :Else
+     mnist←DealWithCsv'd:\datasets\numerai\numerai_tournament_data.csv'
+     nc←((-1)↑⍴mnist)
+     mnist←mnist[;1+(¯1+nc)]
+ :EndIf
+
  ⎕←'Read, now onto glw training...'
  nr←(1↑⍴mnist)
  nc←((-1)↑⍴mnist)
