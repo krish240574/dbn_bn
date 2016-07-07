@@ -7,4 +7,5 @@
  :EndWhile
 
  p←p_y_given_x÷(+/p_y_given_x)
+ ⎕←p
  z←p
