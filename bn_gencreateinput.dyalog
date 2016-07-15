@@ -1,35 +1,39 @@
- z←bn_gencreateinput switch;input;tmp;mnist;nr;nc;isz;nin;nout;numlayers;numclasses;labels;t;binlabels;mnistmat;w;b;u;d;hhatarr
+z←bn_gencreateinput switch;input;tmp;mnist;nr;nc;isz;nin;nout;numlayers;numclasses;labels;t;binlabels;mnistmat;w;b;u;d;hhatarr
  ⎕←'Reading CSV file, few seconds...'
 
  :If switch=1
      mnist←DealWithCsv'd:\datasets\numerai\numerai_training_data.csv'
      nc←((-1)↑⍴mnist)
      mnist←mnist[;nc],mnist[;⍳(¯1+nc)]
+     isz←(¯1+nc)
+     labels←(⍳nr),((nr,1)⍴(1+mnist[;1]))
+     t←(nr×numclasses)⍴0
+     t[(numclasses×labels[;1])+labels[;2]]←1
+     binlabels←(nr,numclasses)⍴t
  :Else
      mnist←DealWithCsv'd:\datasets\numerai\numerai_tournament_data.csv'
      nc←((-1)↑⍴mnist)
-     mnist←mnist[;1+(¯1+nc)]
+     mnist←mnist[;⍳(1+(¯1+nc))]
+     isz←nc
+     binlabels←(⍳nr),(nr,1)⍴0
  :EndIf
 
  ⎕←'Read, now onto glw training...'
  nr←(1↑⍴mnist)
  nc←((-1)↑⍴mnist)
- isz←(¯1+nc)
+
  nin←isz
  nout←nin
 
  numlayers←5
  numclasses←2
 
- labels←(¯1+⍳nr),((nr,1)⍴(1+mnist[;1]))
- t←(nr×numclasses)⍴0
- t[(numclasses×(labels[;1]))+labels[;2]]←1
- binlabels←(nr,numclasses)⍴t
+
 
 
  mnistmat←(nr,isz)⍴mnist[(⍳nr);1+⍳((-1)+nc)]
 
- lr←0.0002
+ lr←0.0001
  ⍝ initialize weights
  a←0.5*(6÷(nin+nout))
  ⍝ http://docs.scipy.org/doc/numpy-1.10.0/reference/generated/numpy.random.uniform.html
