@@ -1,16 +1,25 @@
- bn_glw layernum;li;hhat0;updates
+ z←flag bn_calclatesthhat layernum;jj;kk;bn_axt
 
- :While layernum≤g_numlayers
-     :If layernum>1
-         r←1 bn_calclatesthhat layernum
-         li←(0)(layernum)(10)
-         updates←bn_kcontdiv li ⍝ all changes happen to the global data
-     :Else
-         hhat0←(1,g_isz)⍴g_firstimg1
-         g_hhatarr[layernum;]←hhat0
-     :EndIf
-     layernum←layernum+1
- :EndWhile
-⍝ train softmax layer here
- li←(0)(g_numlayers+1)(10)
- updates←bn_kcontdiv li
+ :If flag=1
+     g_w[layernum;;]←⍉g_w[layernum-1;;]
+     hhat0←(1,g_nin)⍴g_hhatarr[layernum-1;]
+     axt←((1,g_nin)⍴g_b[layernum;])+(hhat0+.×g_w[layernum-1;;])
+     g_hhatarr[layernum;]←(1+(10⍟(*axt)))
+ :Else
+     jj←2
+     hhat0←(1,g_nin)⍴g_hhatarr[1;]
+     :While jj≤layernum
+         axt←((1,g_nin)⍴g_b[jj;])+(hhat0+.×g_w[jj-1;;])
+        ⍝ ReLu
+         hhat←0⌈axt
+        ⍝ hhat←(1÷(1+*-1×axt))
+         g_hhatarr[jj;]←hhat ⍝ store each layer's posterior
+         hhat0←hhat ⍝ output becomes input to next layer
+         jj←jj+1
+        ⍝ need to flip w here, between alternate layers
+         :If ((jj>1)∧(jj≤layernum))
+             g_w[jj;;]←⍉g_w[jj-1;;]
+         :EndIf
+     :EndWhile
+ :EndIf
+ z←1
