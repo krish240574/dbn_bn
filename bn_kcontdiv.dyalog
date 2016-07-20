@@ -9,7 +9,6 @@
  :Else
      v←(1,g_nin)⍴,⊃g_hhatarr[l-1;] ⍝ training sample
  :EndIf
- h0hat←(1,g_nin)⍴,⊃g_hhatarr[l-1;] ⍝ initialize posterior of visible as input
 
  count←1
  :If l>g_numlayers
