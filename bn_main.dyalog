@@ -18,7 +18,7 @@
          ⍝ this will glw-train the DBN
          bn_glw 1
 
-         g_classifier_rbm←(1,(g_isz+g_numclasses))⍴(((1 2)⍴g_binlabels[g_counter;]),((1,g_isz)⍴g_hhatarr[g_numlayers;]))
+         g_classifier_rbm←(1,(g_isz+g_numclasses))⍴(((1,g_numclasses)⍴g_binlabels[g_counter;]),((1,g_isz)⍴g_hhatarr[g_numlayers;]))
          g_yhat[g_counter;]←bn_classify
 ⍝
 ⍝        ⎕←'finetuning dbn...'
