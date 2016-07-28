@@ -1,4 +1,4 @@
- z←bn_gencreateinput switch;input;w_softmax;tmp;mnist;nr;nc;isz;nin;nout;numlayers;numclasses;labels;t;binlabels;mnistmat;w;b;u;d;hhatarr
+ z←bn_gencreateinput switch;input;w_topmost;tmp;mnist;nr;nc;isz;nin;nout;numlayers;numclasses;labels;t;binlabels;mnistmat;w;b;u;d;hhatarr
  ⎕←'Reading CSV file, few seconds...'
 
  :If switch=1
@@ -54,7 +54,7 @@
  ⍝ create the input nested array here
 
  hhatarr←(numlayers,nin)⍴0
- input←(nr)(numclasses)(isz)(hhatarr)(w)(b)(lr)(nin)(numlayers)(mnistmat)(u)(d)(w_softmax)(binlabels)
+ input←(nr)(numclasses)(isz)(hhatarr)(w)(b)(lr)(nin)(numlayers)(mnistmat)(u)(d)(w_topmost)(binlabels)
  w←0
  b←0
  mnistmat←0
