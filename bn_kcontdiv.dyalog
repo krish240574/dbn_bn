@@ -1,7 +1,7 @@
  z←bn_kcontdiv li;biash;biasv;hzero;vzero;count;cdn;nin;l;no_val
  ⍝ CD-n
  no_val←0
- cdn←⊃li[3] ⍝ number of iterations o
+ cdn←⊃li[3] ⍝ number of iterations of the Gibb's chain
  l←⊃li[2] ⍝ layer number
 
  :If l>g_numlayers
@@ -9,8 +9,9 @@
  :Else
      v←(1,g_nin)⍴,⊃g_hhatarr[l-1;] ⍝ training sample
  :EndIf
+ h0hat←(1,g_nin)⍴,⊃g_hhatarr[l-1;] ⍝ initialize posterior of visible as input
 
- count←1
+
  :If l>g_numlayers
      biash←0
      biasv←((1,g_numclasses)⍴g_d),(1,g_nin)⍴g_b[l-1;]
@@ -18,7 +19,7 @@
      biash←(1,g_nin)⍴g_b[l;]
      biasv←(1,g_nin)⍴g_b[l-1;]
  :EndIf
-
+ count←1
  :While count≤cdn
   ⍝  https://www.cs.toronto.edu/~hinton/csc2535/notes/lec4new.pdf
   ⍝  slide 7
