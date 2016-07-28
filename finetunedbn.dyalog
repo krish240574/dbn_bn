@@ -4,21 +4,9 @@
  2 bn_calclatesthhat g_numlayers
  lhhat←(1,g_isz)⍴,⊃g_hhatarr[g_numlayers;]
 
-
  topmosthhat←g_binlabels[ctr;] ⍝ ahh-haa !
  one←(topmosthhat=1)/⍳⍴topmosthhat
  errderivative←(1 1⍴,(one-1)-g_yhat[ctr;one])
-
- ⍝ back-prop
-⍝ mx←g_yhat[ctr;1]⌈g_yhat[ctr;2]
-⍝
-⍝ errderivative←(1,g_isz)⍴,⊃(lhhat-mx)
-
- ⍝ back-prop
- ⍝ errderivative←yhat-topmosthhat
- ⍝ g_b[g_numlayers;]←((1,g_isz)⍴g_b[g_numlayers;])+errderivative
- ⍝ w[g_numlayers;]←w[g_numlayers;]+g_lr×errderivative×lhhat
-
 
  g_b[g_numlayers;]←((1,g_isz)⍴g_b[g_numlayers;])+g_lr×errderivative
  g_w[g_numlayers;;]←g_w[g_numlayers;;]+g_lr×errderivative+.×⍉lhhat
