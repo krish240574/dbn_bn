@@ -17,5 +17,5 @@
  dxc←dxc+(2÷g_isz)×(xc×dvar)
  dmu←+/dxc
  dx←dxc-(dmu÷g_isz)
-
+ 
  z←(dx)(dgamma)(dbeta)
